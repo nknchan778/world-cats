@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>世界中のねこちゃ～ん | 世界の猫ショート動画まとめ</title>
+  <meta name="description" content="世界中の猫のショート動画を、Instagram・X・YouTube・TikTok・Threadsからまとめて見られるサイトです。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐱%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home">
+
+  <header class="site-header">
+    <a class="logo" href="index.html"><span class="logo__icon" aria-hidden="true">🐱</span><span>世界中のねこちゃ～ん</span></a>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero__lead">世界中のかわいい猫ショート動画を、ぜんぶまとめて見られるよ</p>
+      <div class="hero__sns" aria-label="対応しているSNS">
+        <span class="badge sns-instagram">Instagram</span>
+        <span class="badge sns-x">X</span>
+        <span class="badge sns-youtube">YouTube</span>
+        <span class="badge sns-tiktok">TikTok</span>
+        <span class="badge sns-threads">Threads</span>
+      </div>
+    </section>
+
+    <form id="search-form" class="search" role="search">
+      <span class="search__icon" aria-hidden="true">🔍</span>
+      <input id="search-input" class="search__input" type="search" autocomplete="off"
+             placeholder="キーワードで探す(例: 三毛猫、子猫)" aria-label="キーワードで探す">
+    </form>
+
+    <section id="tags-section">
+      <h2 class="section-title">タグから探す</h2>
+      <div id="tag-list" class="chips"></div>
+    </section>
+
+    <p id="check" class="check" hidden></p>
+
+    <h2 id="result-count" class="result-count"></h2>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" hidden>
+      <span class="empty__icon" aria-hidden="true">🙀</span>
+      <span id="empty-msg"></span>
+    </div>
+    <div class="more-wrap"><button id="more" class="btn btn--ghost" type="button" hidden></button></div>
+
+    <noscript><p class="empty">このサイトを見るには、JavaScript を有効にしてください。</p></noscript>
+  </main>
+
+  <footer class="site-footer container">
+    <p>動画は各SNSの公式の埋め込み機能で表示しています。<br>動画の権利は、それぞれの投稿者にあります。</p>
+  </footer>
+
+  <script src="videos.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+/* 世界中のねこちゃ～ん ─ 見た目の設定
+   色や角の丸さを変えたいときは、まず一番上の :root の中の数字を変えてみてください。 */
+
+:root {
+  --bg: #FFFFFF;          /* 背景:真っ白 */
+  --text: #4A3F3F;        /* 文字:やわらかい焦げ茶グレー */
+  --text-soft: #7A6B6B;   /* 補足の文字 */
+  --pink: #FF8FAB;        /* メインのさくらピンク */
+  --pink-soft: #FFF0F4;   /* ごく薄いピンク(タグの背景) */
+  --pink-line: #FFD6E0;   /* 薄いピンク(枠線) */
+  --pink-deep: #C93B67;   /* 濃いピンク(リンク文字) */
+  --mint: #BFEBD9;        /* ワンポイントのミント */
+  --mint-soft: #EAF8F2;
+  --radius-card: 24px;    /* カードの角の丸さ */
+  --shadow: 0 6px 18px rgba(255, 143, 171, 0.18);
+  --font: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.7;
+}
+a { color: var(--pink-deep); }
+:focus-visible { outline: 3px solid var(--pink-deep); outline-offset: 2px; }
+
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+/* ---------- ヘッダー・ひとこと ---------- */
+.site-header { padding: 20px 0 6px; text-align: center; }
+.logo {
+  display: inline-flex; align-items: center; gap: 0.45em;
+  color: var(--text); text-decoration: none; font-weight: 700;
+  font-size: clamp(1.4rem, 6vw, 2.2rem); line-height: 1.3;
+}
+.logo__icon { font-size: 1.15em; }
+
+.hero { text-align: center; padding: 2px 0 18px; }
+.hero__lead { margin: 0 0 10px; color: var(--text-soft); font-size: 0.95rem; }
+.hero__sns { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+
+/* ---------- ボタン(どれも丸っこく) ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4em;
+  min-height: 44px; padding: 0.55em 1.5em;
+  border: 2px solid var(--pink); border-radius: 999px;
+  background: var(--pink); color: var(--text);
+  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+}
+.btn:hover { box-shadow: var(--shadow); }
+.btn--ghost { background: #fff; border-color: var(--pink-line); }
+.btn--ghost:hover { border-color: var(--pink); }
+.btn--small { min-height: 38px; padding: 0.3em 1.1em; font-size: 0.9rem; }
+.btn--block { display: flex; width: 100%; }
+
+/* ---------- 検索ボックス ---------- */
+.search { position: relative; max-width: 640px; margin: 0 auto 8px; }
+.search__icon {
+  position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+  pointer-events: none;
+}
+.search__input {
+  width: 100%; height: 54px; padding: 0 1.3em 0 3.2em;
+  border: 2px solid var(--pink-line); border-radius: 999px;
+  background: #fff; color: var(--text);
+  font: inherit; font-size: 16px; /* 16px未満だとiPhoneで入力時に拡大されてしまう */
+  box-shadow: var(--shadow);
+}
+.search__input::placeholder { color: var(--text-soft); }
+.search__input:focus { outline: none; border-color: var(--pink); box-shadow: 0 0 0 4px rgba(255, 143, 171, 0.28); }
+
+/* ---------- 見出し ---------- */
+.section-title { margin: 26px 0 12px; font-size: 1.15rem; line-height: 1.4; }
+.section-title::before { content: "🐾"; margin-right: 0.4em; }
+.muted { color: var(--text-soft); }
+.tag-title { margin: 14px 0 2px; font-size: clamp(1.6rem, 7vw, 2.4rem); line-height: 1.3; word-break: break-all; }
+.tag-sub { margin: 0 0 14px; color: var(--text-soft); }
+
+/* ---------- タグのボタン ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  min-height: 38px; padding: 0.25em 1em;
+  border: 1.5px solid var(--pink-line); border-radius: 999px;
+  background: var(--pink-soft); color: var(--text);
+  font-weight: 500; font-size: 0.95rem; line-height: 1.3; text-decoration: none;
+}
+.chip:hover { background: var(--pink); border-color: var(--pink); }
+.chip__count {
+  min-width: 1.6em; padding: 0 0.45em; border-radius: 999px;
+  background: #fff; color: var(--pink-deep);
+  font-size: 0.78rem; font-weight: 700; text-align: center;
+}
+.chip--current { background: var(--pink); border-color: var(--pink); font-weight: 700; }
+.chip--small { min-height: 32px; padding: 0.15em 0.85em; font-size: 0.85rem; }
+
+/* ---------- SNSの名札 ---------- */
+.badge {
+  display: inline-block; padding: 0.1em 0.8em; border-radius: 999px;
+  font-size: 0.78rem; font-weight: 700; line-height: 1.7; white-space: nowrap;
+}
+.sns-youtube   { background: #FFE1E1; color: #A8201A; }
+.sns-instagram { background: #FFE0EC; color: #A12A58; }
+.sns-x         { background: #E9ECEF; color: #222222; }
+.sns-tiktok    { background: #D9F5F2; color: #0B625D; }
+.sns-threads   { background: #EDE7F6; color: #46347A; }
+
+/* ---------- 検索結果の表示まわり ---------- */
+.result-count { margin: 22px 0 12px; font-weight: 700; }
+.empty { margin: 30px 0; padding: 28px 16px; border-radius: var(--radius-card); background: var(--pink-soft); text-align: center; }
+.empty__icon { display: block; margin-bottom: 4px; font-size: 2rem; }
+.more-wrap { margin: 26px 0 8px; text-align: center; }
+
+/* ---------- 動画カード ---------- */
+.grid {
+  display: grid; gap: 20px; align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+}
+.card {
+  display: flex; flex-direction: column; min-width: 0; overflow: hidden;
+  border: 2px solid var(--pink-line); border-radius: var(--radius-card);
+  background: #fff; box-shadow: var(--shadow);
+}
+.card__head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; min-width: 0; }
+.card__author { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.92rem; font-weight: 500; }
+.card__author::before { content: "🐾 "; }
+.card__author a { color: var(--text); }
+.card__author .author-unknown { color: var(--text-soft); font-weight: 400; }
+.card__tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 12px 16px 4px; list-style: none; }
+.card__link { margin: 8px 16px 16px; width: calc(100% - 32px); }
+
+/* ---------- 埋め込みの枠 ---------- */
+.embed { position: relative; width: 100%; background: var(--pink-soft); }
+.embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.embed--youtube   { aspect-ratio: 9 / 16; }
+.embed--tiktok    { aspect-ratio: 325 / 740; }
+.embed--instagram { height: 640px; }   /* 読み込み後にInstagramが教えてくれる高さに自動で変わります */
+.embed--threads   { height: 580px; }
+.embed--x         { min-height: 280px; }
+.embed--x.embed--ready { min-height: 0; background: #fff; }
+.embed--linkonly  { min-height: 150px; }
+.embed__x { display: flex; justify-content: center; }
+.embed__note {
+  position: absolute; inset: 0; padding: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  color: var(--text-soft); font-size: 0.9rem; text-align: center;
+}
+.embed__paw { font-size: 2rem; }
+
+/* ---------- ほかのタグ・チェック表示・フッター ---------- */
+.check { margin: 0 0 18px; padding: 14px 16px; border-radius: 18px; background: var(--mint-soft); border: 1.5px solid var(--mint); font-size: 0.92rem; }
+.check h2 { margin: 0 0 6px; font-size: 1rem; }
+.check ul { margin: 6px 0 0; padding-left: 1.2em; }
+.check code { word-break: break-all; font-size: 0.85em; }
+
+.site-footer { margin: 48px 0 28px; text-align: center; color: var(--text-soft); font-size: 0.8rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .chip, .card { transition: box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease; }
+  .btn:hover, .chip:hover { transform: translateY(-1px); }
+  .embed__paw { animation: bob 1.4s ease-in-out infinite; }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+}
