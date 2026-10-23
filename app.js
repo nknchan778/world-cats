@@ -237,6 +237,8 @@
 
   function renderAuthor(entry) {
     fillAuthor(entry.authorBox, entry.video);
+    // 代わりの表紙には、投稿者名を大きく出す(分からないときはSNS名)
+    entry.thumbText.textContent = entry.video.authorLabel || SNS[entry.video.sns].label;
     if (viewer.state && viewer.state.entry === entry) fillAuthor(viewer.author, entry.video);
   }
 
@@ -252,7 +254,9 @@
   function makeThumb(v) {
     const sns = SNS[v.sns];
     const btn = h('button', { class: 'card__thumb', type: 'button', 'aria-label': sns.label + 'の動画を見る' },
-      h('span', { class: 'thumb__fallback sns-' + v.sns, 'aria-hidden': 'true' }, h('span', { class: 'thumb__paw' }, '🐾')));
+      h('span', { class: 'thumb__fallback sns-' + v.sns, 'aria-hidden': 'true' },
+        h('span', { class: 'thumb__paw' }, '🐾'),
+        h('span', { class: 'thumb__text' })));
     if (v.sns === 'youtube') {
       const img = h('img', { class: 'thumb__img', src: 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg', alt: '', loading: 'lazy', decoding: 'async' });
       img.addEventListener('error', () => img.remove()); // 画像が取れなければ、足あとの表紙のまま
@@ -281,7 +285,11 @@
         h('a', { class: 'btn btn--block card__link', href: v.link, target: '_blank', rel: 'noopener noreferrer' },
           '元の投稿', h('span', { class: 'card__link-long' }, 'を見る'), ' ', h('span', { 'aria-hidden': 'true' }, '↗')));
 
-      const entry = { video: v, el, embedBox, note, authorBox, hay: '', mounted: false, authorTried: false };
+      const entry = {
+        video: v, el, embedBox, note, authorBox, hay: '', mounted: false, authorTried: false,
+        thumbText: thumb.querySelector('.thumb__text'),
+      };
+      if (v.sns !== 'youtube') el.classList.add('card--textthumb'); // 表紙に投稿者名が出るので、下の投稿者名は省く
       thumb.addEventListener('click', () => openViewer(entry, thumb));
       const cached = authorCache[v.link];
       if (!v.authorLabel && cached) { v.authorLabel = cached.name; v.authorUrl = cached.url; }

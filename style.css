@@ -175,8 +175,20 @@ a { color: var(--pink-deep); }
   display: block; order: 1; position: relative; width: 100%; aspect-ratio: 3 / 4;
   padding: 0; border: 0; overflow: hidden; background: var(--pink-soft); cursor: pointer;
 }
-.thumb__fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-.thumb__paw { font-size: 2.6rem; opacity: 0.75; }
+.thumb__fallback {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; padding: 0 12px 28px; text-align: center;
+  background-image:
+    radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.6) 0 12px, transparent 13px),
+    radial-gradient(circle at 86% 24%, rgba(255, 255, 255, 0.45) 0 8px, transparent 9px),
+    radial-gradient(circle at 80% 82%, rgba(255, 255, 255, 0.5) 0 20px, transparent 21px);
+}
+.thumb__paw { font-size: 2.2rem; opacity: 0.7; }
+.thumb__text {
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  max-width: 100%; font-size: 0.95rem; font-weight: 700; line-height: 1.4; word-break: break-all;
+}
+.grid--compact .card--textthumb .card__head { display: none; }
 .thumb__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); /* 縦動画の表紙の黒い帯を隠す */ }
 .thumb__badge { position: absolute; left: 8px; top: 8px; box-shadow: 0 0 0 2px #fff; }
 .thumb__play {
