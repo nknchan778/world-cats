@@ -42,7 +42,13 @@
 
     <p id="check" class="check" hidden></p>
 
-    <h2 id="result-count" class="result-count"></h2>
+    <div id="toolbar" class="toolbar">
+      <h2 id="result-count" class="result-count"></h2>
+      <div class="view-toggle" role="group" aria-label="ならべ方">
+        <button type="button" class="view-toggle__btn" data-view="compact" aria-pressed="false">▦ 小さく並べる</button>
+        <button type="button" class="view-toggle__btn" data-view="full" aria-pressed="false">▭ 大きく見る</button>
+      </div>
+    </div>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>
       <span class="empty__icon" aria-hidden="true">🙀</span>
