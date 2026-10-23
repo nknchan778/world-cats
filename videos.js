@@ -41,8 +41,10 @@ const VIDEO_LIST = `
 // ===== ここから下に、動画を1行ずつ足していきます =====
 
 // ▼ 動作確認用のサンプルです(タグは仮のものです)。不要になったら、この3行を消してください。
-https://youtu.be/3hQpnyGSMCU?si=GGEvMvfHnYjg4Fg8   おしゃべり おもしろ かわいい
+https://youtu.be/3hQpnyGSMCU?si=GGEvMvfHnYjg4Fg8   おしゃべり おもしろ 
 https://x.com/higanemochan/status/2109931547860316575?s=46   野良猫 おもしろ
-https://www.instagram.com/reel/Dd2ixkLoHvy/?dlrf=NDlkcTV0ODVpZjI4   @amelunavienna   かわいい 日常
+https://www.instagram.com/reel/Dd2ixkLoHvy/?dlrf=NDlkcTV0ODVpZjI4   @amelunavienna   日常
+https://www.instagram.com/reel/Dd9LHyHMS5W/?rpxt=MWZvejRkMWVvdWlheA== @whiskerwellnessranch 黒猫　
+https://www.instagram.com/reel/DdqSC3OoLBO/?rpxt=cjhxMXV2cDB6bmVk  @fjarilflickans 子猫　ラグドール
 
 `;
