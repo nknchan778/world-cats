@@ -14,7 +14,8 @@
   const TAGS_COLLAPSED = 18;       // トップで最初に見せるタグの数
   const SITE_NAME = '世界中のねこちゃ～ん';
   const AUTHOR_CACHE_KEY = 'neko-author-cache-v1';
-  const LOADING_TEXT = '読み込み中… 表示されないときは、下のボタンから見られます';
+  const SORT_KEY = 'neko-sort-v1';  // 「ランダム/新着順」の選択を覚えておく場所
+  const LOADING_TEXT ='読み込み中… 表示されないときは、下のボタンから見られます';
 
   const SNS = {
     youtube:   { label: 'YouTube',   alias: 'youtube ユーチューブ ようつべ' },
@@ -169,6 +170,32 @@
     });
   }
 
+  // 並び順をランダムにする。同じ訪問(同じタブ)の間は同じ並びにして、タグのページから戻ったときに迷わないようにする
+  function getShuffleSeed() {
+    const fresh = () => Math.floor(Math.random() * 2147483647) + 1;
+    try {
+      let s = Number(sessionStorage.getItem('neko-shuffle-seed'));
+      if (!s) { s = fresh(); sessionStorage.setItem('neko-shuffle-seed', String(s)); }
+      return s;
+    } catch (e) { return fresh(); }
+  }
+
+  function shuffle(list, seed) {
+    let a = seed >>> 0;
+    const rand = () => { // 小さな乱数のしくみ(mulberry32)。同じ数字からは同じ並びになる
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
+  }
+
   function loadVideos() {
     const problems = [];
     const videos = [];
@@ -185,12 +212,12 @@
         const key = v.sns + ':' + v.id;
         if (seen.has(key)) throw new Error('同じ動画がすでに書かれています');
         seen.add(key);
+        v.fileIndex = videos.length; // videos.js の行の順(下の行ほど大きい=新しい)
         videos.push(v);
       } catch (e) {
         problems.push({ text: t, reason: e.message });
       }
     });
-    videos.reverse(); // 新しく足した動画(下の行)ほど上に表示する
     if (problems.length) console.warn('[ねこちゃ～ん] 読み込めなかった行:', problems);
     return { videos, problems };
   }
@@ -388,6 +415,14 @@
     const emptyEl = $('empty');
     const moreBtn = $('more');
     let shown = PAGE_SIZE;
+    const sortBtns = document.querySelectorAll('.sort-toggle__btn');
+
+    // 並び順は2種類。ランダムは、同じタブの間は同じ並びにする。新着順は、videos.js の下の行ほど新しい
+    const orders = {
+      random: shuffle([...entries], getShuffleSeed()),
+      newest: [...entries].sort((a, b) => b.video.fileIndex - a.video.fileIndex),
+    };
+    let sorted = orders.random;
 
     entries.forEach((e) => {
       e.el.hidden = true;
@@ -397,7 +432,7 @@
 
     function update() {
       const words = norm(input ? input.value : '').split(/\s+/).map((w) => w.replace(/^#+/, '')).filter(Boolean);
-      const matched = entries.filter((e) => words.every((w) => e.hay.includes(w)));
+      const matched = sorted.filter((e) => words.every((w) => e.hay.includes(w)));
       entries.forEach((e) => { e.el.hidden = true; });
       matched.forEach((e, i) => { e.el.hidden = i >= shown; });
 
@@ -411,12 +446,41 @@
       moreBtn.textContent = 'もっと見る(あと' + rest + '本)';
     }
 
+    // 「ランダム」「新着順」の切り替え
+    function applySort(mode, save) {
+      sorted = orders[mode];
+      // 画面上の順番だけを変える(部品の位置は動かさないので、読み込み済みの動画が読み込み直しにならない)
+      sorted.forEach((e, i) => { e.el.style.order = String(i); });
+      sortBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.sort === mode)));
+      if (save) { try { localStorage.setItem(SORT_KEY, mode); } catch (e) { /* 保存できなくても困らない */ } }
+      shown = PAGE_SIZE;
+      update();
+    }
+    sortBtns.forEach((b) => b.addEventListener('click', () => applySort(b.dataset.sort, true)));
+
     moreBtn.addEventListener('click', () => { shown += PAGE_SIZE; update(); });
     if (input) {
-      input.addEventListener('input', () => { shown = PAGE_SIZE; update(); });
-      $('search-form').addEventListener('submit', (ev) => { ev.preventDefault(); input.blur(); });
+      // 日本語の変換(確定)など、端末によって「入力した」という合図の出方が違うので、いくつもの合図で絞り込む
+      let last = input.value;
+      const run = (force) => {
+        if (!force && input.value === last) return;
+        last = input.value;
+        shown = PAGE_SIZE;
+        update();
+      };
+      ['input', 'change', 'search', 'compositionend', 'keyup'].forEach((name) => input.addEventListener(name, () => run(false)));
+      // キーボードの「検索」キー:必ず絞り込み、キーボードを閉じて、結果の位置まで移動する
+      $('search-form').addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        run(true);
+        input.blur();
+        setTimeout(() => countEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+      });
     }
-    update();
+    // 最初の並び順:前に選んだほうを使う。初めてなら、ランダム
+    let savedSort = '';
+    try { savedSort = localStorage.getItem(SORT_KEY) || ''; } catch (e) { /* 読めなくても困らない */ }
+    applySort(savedSort === 'newest' ? 'newest' : 'random', false);
   }
 
   // ---------- 7. タグのボタン ----------
@@ -473,7 +537,7 @@
     if (!param) {
       title.textContent = 'タグいちらん';
       sub.textContent = '気になるタグを選んでね';
-      ['search-form', 'result-count', 'grid', 'empty', 'more'].forEach((id) => { const n = $(id); if (n) n.hidden = true; });
+      ['search-form', 'toolbar', 'grid', 'empty', 'more'].forEach((id) => { const n = $(id); if (n) n.hidden = true; });
       $('tags-section').querySelector('.section-title').textContent = 'タグ';
       renderTagChips(tags, '', false);
       return;

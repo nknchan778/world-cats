@@ -42,7 +42,13 @@
 
     <p id="check" class="check" hidden></p>
 
-    <h2 id="result-count" class="result-count"></h2>
+    <div id="toolbar" class="toolbar">
+      <h2 id="result-count" class="result-count"></h2>
+      <div class="sort-toggle" role="group" aria-label="ならべ方">
+        <button type="button" class="sort-toggle__btn" data-sort="random" aria-pressed="true">🎲 ランダム</button>
+        <button type="button" class="sort-toggle__btn" data-sort="newest" aria-pressed="false">🆕 新着順</button>
+      </div>
+    </div>
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty" hidden>
       <span class="empty__icon" aria-hidden="true">🙀</span>
